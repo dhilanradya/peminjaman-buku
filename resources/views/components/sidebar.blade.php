@@ -26,6 +26,12 @@
             <span class="font-medium">Data Buku</span>
         </a>
 
+        <a href="{{ route('admin.dataKategori') }}"
+            class="flex items-center gap-3 px-5 py-3.5 rounded-2xl hover:bg-gray-700 transition-all {{ request()->routeIs('admin.dataKategori') ? 'bg-blue-600 text-white' : 'text-gray-200 hover:text-white' }}">
+            <i class="fas fa-tags text-2xl text-pink-400 w-8"></i>
+            <span class="font-medium">Kategori</span>
+        </a>
+
         <a href="{{ route('admin.dataAnggota') }}"
            class="flex items-center gap-3 px-5 py-3.5 rounded-2xl hover:bg-gray-700 transition-all {{ request()->routeIs('admin.dataAnggota') ? 'bg-blue-600 text-white' : 'text-gray-200 hover:text-white' }}">
             <i class="fas fa-users text-2xl text-blue-400 w-8"></i>

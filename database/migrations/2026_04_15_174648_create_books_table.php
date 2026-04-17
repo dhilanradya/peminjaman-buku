@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('judul');
             $table->string('penulis');
-            $table->enum('kategori', ['Fiksi', 'Non-Fiksi', 'Pendidikan']);
+            $table->foreignId('kategori_id')->constrained('kategoris')->onDelete('cascade');
             $table->string('penerbit');
             $table->integer('stok')->default(0);
             $table->string('foto')->nullable();

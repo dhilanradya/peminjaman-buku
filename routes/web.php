@@ -27,6 +27,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
          ])
          ->parameters(['data-buku' => 'book']);
 
+    Route::resource('data-kategori', \App\Http\Controllers\Admin\KategoriController::class)
+    ->names([
+        'index'   => 'dataKategori',
+        'create'  => 'tambahKategori',
+        'store'   => 'simpanKategori',
+        'edit'    => 'editKategori',
+        'update'  => 'updateKategori',
+        'destroy' => 'hapusKategori',
+    ])
+    ->parameters(['data-kategori' => 'kategori']);
+
     Route::resource('data-anggota', \App\Http\Controllers\Admin\MemberController::class)
      ->names([
          'index'   => 'dataAnggota',
@@ -37,7 +48,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
          'destroy' => 'hapusAnggota',
      ])
      ->parameters(['data-anggota' => 'member']);
-     
+
     Route::get('/data-peminjaman', [App\Http\Controllers\Admin\PeminjamanController::class, 'index'])
          ->name('dataPeminjaman');
 
@@ -48,8 +59,23 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
          ->name('peminjaman.tolak');
 });
 // User Routes
-Route::prefix('user')->name('user.')->group(function () {
+// User Routes
+// User Routes
+Route::prefix('user')->name('user.')->middleware(['auth', 'is_user'])->group(function () {
+
     Route::get('/dashboard', function () {
-        return view('user.dashboard');
-    })->middleware(['auth', 'is_user'])->name('dashboard');
+        $books = \App\Models\Book::where('stok', '>', 0)
+                    ->latest()
+                    ->take(12)
+                    ->get();
+        return view('user.dashboard', compact('books'));
+    })->name('dashboard');
+
+    // Pinjam Buku
+    Route::post('/pinjam', [App\Http\Controllers\User\PeminjamanUserController::class, 'store'])
+         ->name('pinjam.store');
+
+    // Riwayat Peminjaman
+    Route::get('/riwayat', [App\Http\Controllers\User\PeminjamanUserController::class, 'riwayat'])
+         ->name('riwayat');
 });

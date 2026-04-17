@@ -18,4 +18,9 @@ class Book extends Model
     {
         return $this->stok > 0 ? 'Tersedia' : 'Tidak Tersedia';
     }
+
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class);
+    }
 }

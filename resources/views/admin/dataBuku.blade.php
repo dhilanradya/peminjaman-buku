@@ -5,7 +5,7 @@
 @section('content')
 <div class="max-w-7xl mx-auto">
 
-    <!-- Header Halaman -->
+    <!-- Header -->
     <div class="flex justify-between items-center mb-8">
         <div>
             <h1 class="text-3xl font-bold text-white">Data Buku</h1>
@@ -34,15 +34,21 @@
                        placeholder="Cari judul buku, penulis, atau penerbit..."
                        value="{{ request('search') }}">
             </div>
+
+            <!-- ✅ FILTER KATEGORI DINAMIS -->
             <div class="w-72">
-                <select name="kategori"
+                <select name="kategori_id"
                         class="w-full bg-gray-900 border border-gray-700 rounded-2xl px-5 py-3.5 focus:outline-none focus:border-blue-500 text-white">
                     <option value="">Semua Kategori</option>
-                    <option value="Fiksi" {{ request('kategori')=='Fiksi'?'selected':'' }}>Fiksi</option>
-                    <option value="Non-Fiksi" {{ request('kategori')=='Non-Fiksi'?'selected':'' }}>Non-Fiksi</option>
-                    <option value="Pendidikan" {{ request('kategori')=='Pendidikan'?'selected':'' }}>Pendidikan</option>
+                    @foreach($kategoris as $kategori)
+                        <option value="{{ $kategori->id }}"
+                            {{ request('kategori_id') == $kategori->id ? 'selected' : '' }}>
+                            {{ $kategori->nama }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
+
             <button type="submit"
                     class="bg-gray-700 hover:bg-gray-600 px-8 rounded-2xl transition text-white">
                 <i class="fas fa-filter"></i>
@@ -63,14 +69,19 @@
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Kategori</th>
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Penerbit</th>
                         <th class="text-center py-5 px-6 text-gray-400 font-medium w-20">Stok</th>
-                        <th class="text-center py-5 px-6 text-gray-400 font-medium w-36">Status</th> <!-- Diperlebar -->
+                        <th class="text-center py-5 px-6 text-gray-400 font-medium w-36">Status</th>
                         <th class="text-center py-5 px-6 text-gray-400 font-medium w-32">Aksi</th>
                     </tr>
                 </thead>
+
                 <tbody class="divide-y divide-gray-700">
                     @foreach($books as $index => $book)
                     <tr class="hover:bg-gray-700/50 transition">
-                        <td class="py-5 px-6 text-gray-300">{{ $index + 1 + ($books->currentPage()-1)*$books->perPage() }}</td>
+                        <td class="py-5 px-6 text-gray-300">
+                            {{ $index + 1 + ($books->currentPage()-1)*$books->perPage() }}
+                        </td>
+
+                        <!-- Foto -->
                         <td class="py-5 px-6">
                             @if($book->foto)
                                 <img src="{{ asset('storage/books/' . $book->foto) }}"
@@ -81,17 +92,30 @@
                                 </div>
                             @endif
                         </td>
+
+                        <!-- Data -->
                         <td class="py-5 px-6 font-medium text-white">{{ $book->judul }}</td>
                         <td class="py-5 px-6 text-gray-300">{{ $book->penulis }}</td>
+
+                        <!-- ✅ KATEGORI (RELASI) -->
                         <td class="py-5 px-6">
-                            <span class="px-4 py-1.5 text-xs font-medium rounded-2xl
-                                {{ $book->kategori == 'Fiksi' ? 'bg-purple-500/20 text-purple-400' :
-                                   ($book->kategori == 'Non-Fiksi' ? 'bg-amber-500/20 text-amber-400' : 'bg-sky-500/20 text-sky-400') }}">
-                                {{ $book->kategori }}
-                            </span>
+                            @if($book->kategori)
+                                <span class="px-4 py-1.5 text-xs font-medium rounded-2xl bg-blue-500/20 text-blue-400">
+                                    {{ $book->kategori->nama }}
+                                </span>
+                            @else
+                                <span class="text-gray-500 text-sm">-</span>
+                            @endif
                         </td>
+
                         <td class="py-5 px-6 text-gray-300">{{ $book->penerbit }}</td>
-                        <td class="py-5 px-6 text-center font-bold text-lg text-gray-300">{{ $book->stok }}</td>
+
+                        <!-- Stok -->
+                        <td class="py-5 px-6 text-center font-bold text-lg text-gray-300">
+                            {{ $book->stok }}
+                        </td>
+
+                        <!-- Status -->
                         <td class="py-5 px-6 text-center">
                             @if($book->stok > 0)
                                 <span class="inline-block px-5 py-1.5 bg-emerald-500/20 text-emerald-400 text-sm font-medium rounded-2xl">
@@ -103,13 +127,16 @@
                                 </span>
                             @endif
                         </td>
+
+                        <!-- Aksi -->
                         <td class="py-5 px-6 text-center">
                             <div class="flex items-center justify-center gap-5">
                                 <a href="{{ route('admin.editBuku', $book) }}"
                                    class="text-amber-400 hover:text-amber-300 hover:scale-110 transition">
                                     <i class="fas fa-edit text-xl"></i>
                                 </a>
-                                <form action="{{ route('admin.hapusBuku', $book) }}" method="POST" class="inline"
+
+                                <form action="{{ route('admin.hapusBuku', $book) }}" method="POST"
                                       onsubmit="return confirm('Yakin ingin menghapus buku ini?')">
                                     @csrf
                                     @method('DELETE')
@@ -120,6 +147,7 @@
                                 </form>
                             </div>
                         </td>
+
                     </tr>
                     @endforeach
                 </tbody>

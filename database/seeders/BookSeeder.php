@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Book;
+use App\Models\Kategori;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -14,12 +15,13 @@ class BookSeeder extends Seeder
         // Hapus folder books lama dan buat baru
         Storage::disk('public')->deleteDirectory('books');
         Storage::disk('public')->makeDirectory('books');
+        $kategoris = Kategori::pluck('id', 'nama');
 
         $dummyBooks = [
             [
                 'judul'     => 'Laskar Pelangi',
                 'penulis'   => 'Andrea Hirata',
-                'kategori'  => 'Fiksi',
+                'kategori_id' => $kategoris['Fiksi'],
                 'penerbit'  => 'Bentang Pustaka',
                 'stok'      => 23,
                 'image_url' => 'https://picsum.photos/id/1015/800/1200', // Buku novel
@@ -27,7 +29,7 @@ class BookSeeder extends Seeder
             [
                 'judul'     => 'Negeri 5 Menara',
                 'penulis'   => 'Ahmad Fuadi',
-                'kategori'  => 'Fiksi',
+                'kategori_id' => $kategoris['Non-Fiksi'],
                 'penerbit'  => 'Gramedia Pustaka Utama',
                 'stok'      => 15,
                 'image_url' => 'https://picsum.photos/id/201/800/1200',
@@ -35,7 +37,7 @@ class BookSeeder extends Seeder
             [
                 'judul'     => 'Atomic Habits',
                 'penulis'   => 'James Clear',
-                'kategori'  => 'Non-Fiksi',
+                'kategori_id' => $kategoris['Non-Fiksi'],
                 'penerbit'  => 'Gramedia Pustaka Utama',
                 'stok'      => 18,
                 'image_url' => 'https://picsum.photos/id/367/800/1200',
@@ -43,7 +45,7 @@ class BookSeeder extends Seeder
             [
                 'judul'     => 'The Psychology of Money',
                 'penulis'   => 'Morgan Housel',
-                'kategori'  => 'Non-Fiksi',
+                'kategori_id' => $kategoris['Teknologi'],
                 'penerbit'  => 'Gramedia',
                 'stok'      => 9,
                 'image_url' => 'https://picsum.photos/id/870/800/1200',
@@ -51,7 +53,7 @@ class BookSeeder extends Seeder
             [
                 'judul'     => 'Harry Potter and The Philosopher\'s Stone',
                 'penulis'   => 'J.K. Rowling',
-                'kategori'  => 'Fiksi',
+                'kategori_id' => $kategoris['Non-Fiksi'],
                 'penerbit'  => 'Bloomsbury',
                 'stok'      => 7,
                 'image_url' => 'https://picsum.photos/id/1016/800/1200',
@@ -59,7 +61,7 @@ class BookSeeder extends Seeder
             [
                 'judul'     => 'Sapiens: Riwayat Singkat Umat Manusia',
                 'penulis'   => 'Yuval Noah Harari',
-                'kategori'  => 'Non-Fiksi',
+                'kategori_id' => $kategoris['Sejarah'],
                 'penerbit'  => 'Gramedia Pustaka Utama',
                 'stok'      => 14,
                 'image_url' => 'https://picsum.photos/id/106/800/1200',
@@ -67,15 +69,15 @@ class BookSeeder extends Seeder
             [
                 'judul'     => 'Bumi',
                 'penulis'   => 'Tere Liye',
-                'kategori'  => 'Fiksi',
+                'kategori_id' => $kategoris['Fiksi'],
                 'penerbit'  => 'Gramedia Pustaka Utama',
-                'stok'      => 0,
+                'stok'      => 10,
                 'image_url' => 'https://picsum.photos/id/133/800/1200',
             ],
             [
                 'judul'     => 'Matematika Dasar SMA',
                 'penulis'   => 'Tim Erlangga',
-                'kategori'  => 'Pendidikan',
+                'kategori_id' => $kategoris['Pendidikan'],
                 'penerbit'  => 'Erlangga',
                 'stok'      => 45,
                 'image_url' => 'https://picsum.photos/id/201/800/1200',
