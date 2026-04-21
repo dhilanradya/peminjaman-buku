@@ -19,26 +19,27 @@ class PeminjamanController extends Controller
     }
 
     // Terima Peminjaman
-    public function terima(Peminjaman $peminjaman)
-    {
-        if ($peminjaman->status !== 'Menunggu') {
-            return back()->with('error', 'Status sudah diproses!');
-        }
-
-        $book = $peminjaman->book;
-
-        if ($book->stok < 1) {
-            return back()->with('error', 'Stok buku tidak mencukupi!');
-        }
-
-        $book->decrement('stok');
-        $peminjaman->update([
-            'status' => 'Diterima',
-            'tgl_pinjam' => now()->toDateString()
-        ]);
-
-        return back()->with('success', 'Peminjaman berhasil diterima. Stok buku berkurang.');
+    // Terima Peminjaman
+public function terima(Peminjaman $peminjaman)
+{
+    if ($peminjaman->status !== 'Menunggu') {
+        return back()->with('error', 'Status sudah diproses!');
     }
+
+    $book = $peminjaman->book;
+
+    if ($book->stok < $peminjaman->jumlah) {
+        return back()->with('error', 'Stok buku tidak mencukupi!');
+    }
+
+    $book->decrement('stok', $peminjaman->jumlah); // sesuaikan jumlah
+    $peminjaman->update([
+        'status' => 'Diterima',
+        'tgl_pinjam' => now()->toDateString()
+    ]);
+
+    return back()->with('success', 'Peminjaman berhasil diterima. Stok buku berkurang.');
+}
 
     // Tolak Peminjaman
     public function tolak(Peminjaman $peminjaman)

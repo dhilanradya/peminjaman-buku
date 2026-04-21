@@ -62,8 +62,8 @@ class BookController extends Controller
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
             $namaFoto = time() . '.' . $foto->getClientOriginalExtension();
-            $foto->storeAs('public/foto_buku', $namaFoto);
-            $data['foto'] = $namaFoto;
+            $path = $foto->store('books', 'public');
+            $data['foto'] = basename($path);
         }
 
         Book::create($data);   // atau nama model kamu
@@ -113,7 +113,7 @@ class BookController extends Controller
     public function destroy(Book $book)
     {
         if ($book->foto && Storage::disk('public')->exists('books/' . $book->foto)) {
-            Storage::disk('public')->delete('books/' . $book->foto);
+           Storage::disk('public')->exists('books/' . $book->foto);
         }
 
         $book->delete();

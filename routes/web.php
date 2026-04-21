@@ -75,17 +75,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
 // ====================== USER ROUTES ======================
 Route::prefix('user')->name('user.')->middleware(['auth', 'is_user'])->group(function () {
 
-    Route::get('/dashboard', function (Illuminate\Http\Request $request) {
+     Route::get('/dashboard', function (Illuminate\Http\Request $request) {
 
     $query = \App\Models\Book::query();
 
-    // Search
     if ($request->search) {
         $search = $request->search;
         $query->where('judul', 'like', "%$search%");
     }
 
-    // Filter kategori
     if ($request->kategori_id) {
         $query->where('kategori_id', $request->kategori_id);
     }
@@ -93,7 +91,14 @@ Route::prefix('user')->name('user.')->middleware(['auth', 'is_user'])->group(fun
     $books = $query->latest()->take(10)->get();
     $kategoris = \App\Models\Kategori::all();
 
-    return view('user.dashboard', compact('books', 'kategoris'));
+    // Ganti auth()->id() dengan \Auth::id()
+    $bukuDipinjam = \App\Models\Peminjaman::with('book')
+    ->where('user_id', request()->user()->id)
+    ->where('status', 'Diterima')
+    ->get();
+
+    return view('user.dashboard', compact('books', 'kategoris', 'bukuDipinjam'));
+
 })->name('dashboard');
 
     // Pinjam Buku
@@ -110,4 +115,8 @@ Route::prefix('user')->name('user.')->middleware(['auth', 'is_user'])->group(fun
 
     Route::get('/buku', [App\Http\Controllers\User\BukuController::class, 'index'])
     ->name('buku');
+
+    // Profile User
+    Route::get('/profile', [App\Http\Controllers\User\ProfileController::class, 'index'])
+        ->name('profile');
 });

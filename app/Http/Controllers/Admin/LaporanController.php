@@ -74,7 +74,7 @@ class LaporanController extends Controller
 
         $callback = function() use ($laporan) {
             $file = fopen('php://output', 'w');
-            fputcsv($file, ['No', 'Nama Siswa', 'Kelas', 'Buku', 'Tanggal Pinjam', 'Batas Kembali', 'Tanggal Dikembalikan', 'Denda']);
+            fputcsv($file, ['No', 'Nama Siswa', 'Kelas', 'Buku','Jumlah', 'Tanggal Pinjam', 'Batas Kembali', 'Tanggal Dikembalikan', 'Denda']);
 
             foreach ($laporan as $index => $p) {
                 fputcsv($file, [
@@ -82,6 +82,7 @@ class LaporanController extends Controller
                     $p->user->nama ?? 'N/A',
                     $p->user->kelas ?? '-',
                     $p->book->judul,
+                    $p->jumlah,
                     $p->tgl_pinjam,
                     $p->tgl_kembali,
                     $p->tgl_kembali_actual ?? '-',

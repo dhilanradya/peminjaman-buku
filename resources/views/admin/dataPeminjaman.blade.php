@@ -36,6 +36,7 @@
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Nama Anggota</th>
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Kelas</th>
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Buku</th>
+                        <th class="text-left py-5 px-6 text-gray-400 font-medium">Jumlah</th>
                         <th class="text-center py-5 px-6 text-gray-400 font-medium">Tgl Pinjam</th>
                         <th class="text-center py-5 px-6 text-gray-400 font-medium">Tgl Kembali</th>
                         <th class="text-center py-5 px-6 text-gray-400 font-medium w-32">Status</th>
@@ -49,6 +50,7 @@
                         <td class="py-5 px-6 font-medium text-white">{{ $pinjam->user->nama }}</td>
                         <td class="py-5 px-6 text-gray-300">{{ $pinjam->user->kelas }}</td>
                         <td class="py-5 px-6 text-gray-300">{{ $pinjam->book->judul }}</td>
+                        <td class="py-5 px-6 text-gray-300">{{ $pinjam->jumlah }}</td>
                         <td class="py-5 px-6 text-center text-gray-300">{{ $pinjam->tgl_pinjam ? \Carbon\Carbon::parse($pinjam->tgl_pinjam)->format('d M Y') : '-' }}</td>
                         <td class="py-5 px-6 text-center text-gray-300">{{ $pinjam->tgl_kembali ? \Carbon\Carbon::parse($pinjam->tgl_kembali)->format('d M Y') : 'Belum dikembalikan' }}</td>
                         <td class="py-5 px-6 text-center">

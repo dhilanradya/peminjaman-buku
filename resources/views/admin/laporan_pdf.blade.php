@@ -22,6 +22,7 @@
                 <th>Nama Siswa</th>
                 <th>Kelas</th>
                 <th>Buku</th>
+                <th>Jumlah</th>
                 <th>Tgl Pinjam</th>
                 <th>Batas Kembali</th>
                 <th>Tgl Dikembalikan</th>
@@ -35,6 +36,7 @@
                 <td>{{ $p->user->nama ?? 'N/A' }}</td>
                 <td>{{ $p->user->kelas ?? '-' }}</td>
                 <td>{{ $p->book->judul }}</td>
+                <td>{{ $p->jumlah }}</td>
                 <td>{{ $p->tgl_pinjam }}</td>
                 <td>{{ $p->tgl_kembali }}</td>
                 <td>{{ $p->tgl_kembali_actual ?? '-' }}</td>

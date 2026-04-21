@@ -11,12 +11,13 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
+            $table->integer('jumlah')->default(1); // tambahkan ini
             $table->date('tgl_pinjam');
             $table->date('tgl_kembali')->nullable();
-            $table->date('tgl_kembali_actual')->nullable();     // Tanggal aktual pengembalian
-            $table->integer('denda')->default(0);               // Denda dalam rupiah
+            $table->date('tgl_kembali_actual')->nullable();
+            $table->integer('denda')->default(0);
             $table->enum('status', ['Menunggu', 'Diterima', 'Ditolak', 'Dikembalikan'])
-                  ->default('Menunggu');
+                ->default('Menunggu');
             $table->timestamps();
         });
     }

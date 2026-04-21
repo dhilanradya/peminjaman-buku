@@ -52,7 +52,9 @@
     </nav>
 
     <!-- Sidebar Footer -->
+     <!--
     <div class="p-5 border-t border-gray-600 bg-gray-800 text-xs text-gray-400 text-center">
         © {{ date('Y') }} PIJAM - Admin System
     </div>
+    -->
 </aside>

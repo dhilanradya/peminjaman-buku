@@ -38,12 +38,13 @@
                     <div class="grid grid-cols-2 gap-6">
                         <div>
                             <label class="block text-gray-400 text-sm mb-2">Kategori</label>
-                            <select name="kategori"
-                                    class="w-full bg-gray-900 border border-gray-700 rounded-2xl px-5 py-4 focus:outline-none focus:border-blue-500 text-white"
-                                    required>
-                                <option value="Fiksi" {{ old('kategori', $book->kategori) == 'Fiksi' ? 'selected' : '' }}>Fiksi</option>
-                                <option value="Non-Fiksi" {{ old('kategori', $book->kategori) == 'Non-Fiksi' ? 'selected' : '' }}>Non-Fiksi</option>
-                                <option value="Pendidikan" {{ old('kategori', $book->kategori) == 'Pendidikan' ? 'selected' : '' }}>Pendidikan</option>
+                            <select name="kategori_id"
+                                class="w-full bg-gray-900 border border-gray-700 rounded-2xl px-5 py-4 focus:outline-none focus:border-blue-500 text-white"
+                                required>
+                                <option value="">Pilih Kategori</option>
+                                @foreach($kategoris as $kategori)
+                                    <option value="{{ $kategori->id }}">{{ $kategori->nama }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div>

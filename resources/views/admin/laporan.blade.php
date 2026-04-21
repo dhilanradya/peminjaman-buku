@@ -88,6 +88,7 @@
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Nama Siswa</th>
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Kelas</th>
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Buku</th>
+                        <th class="text-left py-5 px-6 text-gray-400 font-medium">Jumlah</th>
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Tanggal Pinjam</th>
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Batas Kembali</th>
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Tanggal Dikembalikan</th>
@@ -102,6 +103,7 @@
                         <td class="py-5 px-6 font-medium text-white">{{ $p->user->nama ?? 'N/A' }}</td>
                         <td class="py-5 px-6 text-gray-300">{{ $p->user->kelas ?? '-' }}</td>
                         <td class="py-5 px-6 text-gray-300">{{ $p->book->judul }}</td>
+                        <td class="py-5 px-6 text-gray-300">{{ $p->jumlah }}</td>
                         <td class="py-5 px-6 text-gray-300">{{ \Carbon\Carbon::parse($p->tgl_pinjam)->format('d M Y') }}</td>
                         <td class="py-5 px-6 text-gray-300">{{ \Carbon\Carbon::parse($p->tgl_kembali)->format('d M Y') }}</td>
                         <td class="py-5 px-6 text-gray-300">
