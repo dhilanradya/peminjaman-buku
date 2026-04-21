@@ -11,8 +11,9 @@ class Peminjaman extends Model
 
     protected $table = 'peminjaman';
 
-    protected $fillable = [
-        'user_id', 'book_id', 'tgl_pinjam', 'tgl_kembali', 'status'
+   protected $fillable = [
+    'user_id', 'book_id', 'tgl_pinjam', 'tgl_kembali',
+    'tgl_kembali_actual', 'denda', 'status'
     ];
 
     public function user()

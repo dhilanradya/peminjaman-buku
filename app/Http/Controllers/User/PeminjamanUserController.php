@@ -53,4 +53,51 @@ class PeminjamanUserController extends Controller
 
         return view('user.riwayat', compact('riwayat'));
     }
+
+    public function kembalikan(Peminjaman $peminjaman)
+{
+
+    if ($peminjaman->user_id !== Auth::id()) {
+        abort(403);
+    }
+
+    if ($peminjaman->status !== 'Diterima') {
+        return back()->with('error', 'Buku ini tidak dapat dikembalikan.');
+    }
+
+    $tglKembaliActual = now()->toDateString();
+
+    $dueDate    = \Carbon\Carbon::parse($peminjaman->tgl_kembali);   // Batas Kembali
+    $returnDate = \Carbon\Carbon::parse($tglKembaliActual);          // Tanggal Pengembalian
+
+    // Hitung selisih hari
+    $hariTelat = $dueDate->diffInDays($returnDate, false);
+
+    // Pastikan hanya ambil nilai positif
+    $hariTelat = max(0, $hariTelat);
+
+    $denda = $hariTelat * 1000;
+
+    $peminjaman->update([
+        'status'              => 'Dikembalikan',
+        'tgl_kembali_actual' => $tglKembaliActual,
+        'denda'               => $denda,
+    ]);
+
+    // Kembalikan stok
+    $peminjaman->book->increment('stok');
+
+    $pesan = $denda > 0
+        ? "Buku berhasil dikembalikan. Denda: Rp " . number_format($denda, 0, ',', '.')
+        : "Buku berhasil dikembalikan tepat waktu.";
+
+    return back()->with('success', $pesan);
+
+        dd([
+        'tgl_kembali (batas)' => $peminjaman->tgl_kembali,
+        'tgl_kembali_actual' => $tglKembaliActual,
+        'hariTelat' => $hariTelat,
+        'denda' => $denda
+    ]);
+}
 }

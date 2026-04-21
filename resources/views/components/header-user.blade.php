@@ -19,6 +19,12 @@
                 <i class="fas fa-tachometer-alt"></i>
                 Dashboard
             </a>
+            <a href="{{ route('user.buku') }}"
+               class="flex items-center gap-2 font-medium hover:text-blue-400 transition pb-1
+                      {{ request()->routeIs('user.buku') ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-400' }}">
+                <i class="fas fa-book"></i>
+                Buku
+            </a>
 
             <a href="{{ route('user.riwayat') }}"
                class="flex items-center gap-2 font-medium hover:text-blue-400 transition pb-1

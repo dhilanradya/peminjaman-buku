@@ -48,26 +48,28 @@ class BookController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'judul'        => 'required|string|max:255',
-            'penulis'      => 'required|string|max:255',
-            'kategori_id'  => 'required|exists:kategoris,id', // ✅ FIX
-            'penerbit'     => 'required|string|max:255',
-            'stok'         => 'required|integer|min:0',
-            'foto'         => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'judul'       => 'required|string|max:255',
+            'penulis'     => 'required|string|max:255',
+            'kategori_id' => 'required|exists:kategoris,id',
+            'penerbit'    => 'required|string|max:255',
+            'stok'        => 'required|integer|min:0',
+            'foto'        => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $data = $request->except('foto');
+        $data = $request->only(['judul', 'penulis', 'kategori_id', 'penerbit', 'stok']);
 
-        // Upload Foto
+        // Upload foto jika ada
         if ($request->hasFile('foto')) {
-            $path = $request->file('foto')->store('books', 'public');
-            $data['foto'] = basename($path);
+            $foto = $request->file('foto');
+            $namaFoto = time() . '.' . $foto->getClientOriginalExtension();
+            $foto->storeAs('public/foto_buku', $namaFoto);
+            $data['foto'] = $namaFoto;
         }
 
-        Book::create($data);
+        Book::create($data);   // atau nama model kamu
 
         return redirect()->route('admin.dataBuku')
-                         ->with('success', 'Buku berhasil ditambahkan!');
+            ->with('success', 'Buku berhasil ditambahkan!');
     }
 
     public function edit(Book $book)

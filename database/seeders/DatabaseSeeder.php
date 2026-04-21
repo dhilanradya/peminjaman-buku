@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
             KategoriSeeder::class,
             BookSeeder::class,
             MemberSeeder::class,
-            PeminjamanSeeder::class,
         ]);
     }
 }

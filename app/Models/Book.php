@@ -10,7 +10,12 @@ class Book extends Model
     use HasFactory;
 
     protected $fillable = [
-        'judul', 'penulis', 'kategori', 'penerbit', 'stok', 'foto'
+        'judul',
+        'penulis',
+        'kategori_id',
+        'penerbit',
+        'stok',
+        'foto'
     ];
 
     // Accessor untuk status
@@ -19,6 +24,7 @@ class Book extends Model
         return $this->stok > 0 ? 'Tersedia' : 'Tidak Tersedia';
     }
 
+    // Relationship
     public function kategori()
     {
         return $this->belongsTo(Kategori::class);

@@ -56,6 +56,8 @@
                                 <span class="inline-block px-5 py-1.5 bg-yellow-500/20 text-yellow-400 text-sm font-medium rounded-2xl">Menunggu</span>
                             @elseif($pinjam->status == 'Diterima')
                                 <span class="inline-block px-5 py-1.5 bg-emerald-500/20 text-emerald-400 text-sm font-medium rounded-2xl">Diterima</span>
+                            @elseif($pinjam->status == 'Dikembalikan')
+                                <span class="inline-block px-5 py-1.5 bg-blue-500/20 text-blue-400 text-sm font-medium rounded-2xl">Dikembalikan</span>
                             @else
                                 <span class="inline-block px-5 py-1.5 bg-red-500/20 text-red-400 text-sm font-medium rounded-2xl">Ditolak</span>
                             @endif

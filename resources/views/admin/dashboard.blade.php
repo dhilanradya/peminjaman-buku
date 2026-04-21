@@ -20,8 +20,20 @@
             <div class="bg-gray-800/90 backdrop-blur-lg border border-gray-700 rounded-2xl p-6 shadow-xl hover:scale-105 transition">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-gray-400 text-sm">Total Barang</p>
-                        <h2 class="text-2xl font-bold text-white mt-1">120</h2>
+                        <p class="text-gray-400 text-sm">Total Buku</p>
+                        <h2 class="text-2xl font-bold text-white mt-1">{{ $totalBuku }}</h2>
+                    </div>
+                    <div class="bg-gradient-to-r from-blue-500 to-sky-600 p-3 rounded-xl text-white">
+                        <i class="fas fa-book"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800/90 backdrop-blur-lg border border-gray-700 rounded-2xl p-6 shadow-xl hover:scale-105 transition">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm">Total Stok Buku</p>
+                        <h2 class="text-2xl font-bold text-white mt-1">{{ $totalStok }}</h2>
                     </div>
                     <div class="bg-gradient-to-r from-blue-500 to-sky-600 p-3 rounded-xl text-white">
                         <i class="fas fa-box"></i>
@@ -34,7 +46,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-gray-400 text-sm">Peminjaman</p>
-                        <h2 class="text-2xl font-bold text-white mt-1">45</h2>
+                        <h2 class="text-2xl font-bold text-white mt-1">{{ $totalPeminjaman }}</h2>
                     </div>
                     <div class="bg-gradient-to-r from-blue-500 to-sky-600 p-3 rounded-xl text-white">
                         <i class="fas fa-hand-holding"></i>
@@ -42,25 +54,14 @@
                 </div>
             </div>
 
-            <!-- Card -->
-            <div class="bg-gray-800/90 backdrop-blur-lg border border-gray-700 rounded-2xl p-6 shadow-xl hover:scale-105 transition">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-400 text-sm">Pengembalian</p>
-                        <h2 class="text-2xl font-bold text-white mt-1">30</h2>
-                    </div>
-                    <div class="bg-gradient-to-r from-blue-500 to-sky-600 p-3 rounded-xl text-white">
-                        <i class="fas fa-undo"></i>
-                    </div>
-                </div>
-            </div>
+
 
             <!-- Card -->
             <div class="bg-gray-800/90 backdrop-blur-lg border border-gray-700 rounded-2xl p-6 shadow-xl hover:scale-105 transition">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-gray-400 text-sm">User</p>
-                        <h2 class="text-2xl font-bold text-white mt-1">20</h2>
+                       <h2 class="text-2xl font-bold text-white mt-1">{{ $totalUser }}</h2>
                     </div>
                     <div class="bg-gradient-to-r from-blue-500 to-sky-600 p-3 rounded-xl text-white">
                         <i class="fas fa-users"></i>
@@ -74,8 +75,35 @@
         <div class="mt-10 bg-gray-800/90 backdrop-blur-lg border border-gray-700 rounded-2xl p-6 shadow-xl">
             <h2 class="text-xl font-semibold text-white mb-4">Aktivitas Terbaru</h2>
 
-            <div class="text-gray-400 text-sm">
-                Belum ada aktivitas terbaru...
+           <div class="space-y-4">
+                @forelse($aktivitas as $item)
+                    <a
+                        href="{{ $item->status == 'Dikembalikan' ? route('admin.laporan') : route('admin.dataPeminjaman') }}"
+                        class="block bg-gray-700/50 hover:bg-gray-700 p-4 rounded-xl transition"
+                    >
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-white text-sm font-semibold">
+                                    {{ $item->user->nama }}
+                                </p>
+
+                                <p class="text-gray-400 text-xs">
+                                    @if($item->status == 'Dikembalikan')
+                                        Mengembalikan buku "{{ $item->book->judul }}"
+                                    @else
+                                        Meminjam buku "{{ $item->book->judul }}"
+                                    @endif
+                                </p>
+                            </div>
+
+                            <div class="text-xs text-gray-400">
+                                {{ $item->created_at->diffForHumans() }}
+                            </div>
+                        </div>
+                    </a>
+                @empty
+                    <p class="text-gray-400 text-sm">Belum ada aktivitas terbaru...</p>
+                @endforelse
             </div>
         </div>
 

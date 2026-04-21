@@ -44,7 +44,7 @@
             <span class="font-medium">Peminjaman</span>
         </a>
 
-        <a href="#"
+        <a href="{{ route('admin.laporan') }}"
            class="flex items-center gap-3 px-5 py-3.5 rounded-2xl hover:bg-gray-700 transition-all text-gray-200 hover:text-white">
             <i class="fas fa-chart-bar text-2xl text-violet-400 w-8"></i>
             <span class="font-medium">Laporan</span>
