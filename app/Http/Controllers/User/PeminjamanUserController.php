@@ -13,40 +13,43 @@ use Carbon\Carbon;
 class PeminjamanUserController extends Controller
 {
     // Dashboard: tampilkan buku tersedia + buku sedang dipinjam user
-   public function dashboard(Request $request)
-    {
-        $query = Book::query();
+  public function dashboard(Request $request)
+{
+    $query = Book::query();
 
-        if ($request->search) {
-            $query->where('judul', 'like', '%' . $request->search . '%')
-                ->orWhere('penulis', 'like', '%' . $request->search . '%');
-        }
-
-        if ($request->kategori_id) {
-            $query->where('kategori_id', $request->kategori_id);
-        }
-
-        $books = $query->paginate(10);
-        $kategoris = Kategori::all();
-
-        // ✅ CEK apakah user punya peminjaman aktif
-        $punyaPinjamanAktif = Peminjaman::where('user_id', Auth::id())
-            ->whereIn('status', ['Menunggu', 'Diterima'])
-            ->exists();
-
-        // Ambil peminjaman user yang sedang aktif (status Diterima)
-        $bukuDipinjam = Peminjaman::with('book')
-            ->where('user_id', Auth::id())
-            ->where('status', 'Diterima')
-            ->get();
-
-        return view('user.dashboard', compact(
-            'books',
-            'kategoris',
-            'bukuDipinjam',
-            'punyaPinjamanAktif' 
-        ));
+    if ($request->search) {
+        $query->where('judul', 'like', '%' . $request->search . '%')
+            ->orWhere('penulis', 'like', '%' . $request->search . '%');
     }
+
+    if ($request->kategori_id) {
+        $query->where('kategori_id', $request->kategori_id);
+    }
+
+    $books    = $query->paginate(10);
+    $kategoris = Kategori::all();
+
+    $punyaDendaBelumBayar = Peminjaman::where('user_id', Auth::id())
+        ->where('status_denda', 'Belum Dibayar')
+        ->exists();
+
+    $punyaPinjamanAktif = $punyaDendaBelumBayar || Peminjaman::where('user_id', Auth::id())
+        ->whereIn('status', ['Menunggu', 'Diterima', 'Menunggu Pengembalian'])
+        ->exists();
+
+    $bukuDipinjam = Peminjaman::with('book')
+        ->where('user_id', Auth::id())
+        ->whereIn('status', ['Diterima', 'Menunggu Pengembalian'])
+        ->get();
+
+    return view('user.dashboard', compact(
+        'books',
+        'kategoris',
+        'bukuDipinjam',
+        'punyaPinjamanAktif',
+        'punyaDendaBelumBayar'
+    ));
+}
 
     // Store peminjaman baru
    public function store(Request $request)
@@ -58,18 +61,29 @@ class PeminjamanUserController extends Controller
 
     $book = Book::findOrFail($request->book_id);
 
-    // ❌ CEK PEMINJAMAN AKTIF (GLOBAL)
+    // ❌ CEK DENDA BELUM DIBAYAR
+    $punyaDenda = Peminjaman::where('user_id', Auth::id())
+        ->where('status_denda', 'Belum Dibayar')
+        ->exists();
+
+    if ($punyaDenda) {
+        return redirect()->route('user.dashboard')
+        ->with('warning', 'Anda masih memiliki denda yang belum dibayar! Silakan lunasi terlebih dahulu.');
+    }
+
+    // ❌ CEK PEMINJAMAN AKTIF
     $aktif = Peminjaman::where('user_id', Auth::id())
-        ->whereIn('status', ['Menunggu', 'Diterima'])
+        ->whereIn('status', ['Menunggu', 'Diterima', 'Menunggu Pengembalian'])
         ->exists();
 
     if ($aktif) {
-        return back()->with('error', 'Anda masih memiliki peminjaman aktif!');
+        return redirect()->route('user.dashboard')
+        ->with('warning', 'Anda masih memiliki peminjaman aktif!');
     }
 
-    // ❌ CEK STOK (karena sekarang jumlah = 1)
     if ($book->stok < 1) {
-        return back()->with('error', 'Stok buku tidak tersedia!');
+        return redirect()->route('user.dashboard')
+        ->with('error', 'Stok buku tidak tersedia!');
     }
 
     Peminjaman::create([
@@ -81,42 +95,28 @@ class PeminjamanUserController extends Controller
         'status'      => 'Menunggu',
     ]);
 
-    return back()->with('success', 'Pengajuan peminjaman berhasil dikirim!');
+    return redirect()->route('user.dashboard')
+        ->with('success', 'Pengajuan peminjaman berhasil dikirim!');
 }
 
-    // Kembalikan buku (dipanggil dari modal di dashboard)
-    public function kembalikan(Peminjaman $peminjaman)
-    {
-        // Pastikan peminjaman milik user yang login
-        if ($peminjaman->user_id !== Auth::id()) {
-            abort(403);
-        }
 
-        if ($peminjaman->status !== 'Diterima') {
-            return back()->with('error', 'Peminjaman tidak dalam status aktif!');
-        }
-
-        $tglKembaliActual = now()->toDateString();
-        $tglBatas = Carbon::parse($peminjaman->tgl_kembali);
-        $tglActual = Carbon::parse($tglKembaliActual);
-
-        $denda = 0;
-        if ($tglActual->gt($tglBatas)) {
-            $telat = $tglBatas->diffInDays($tglActual);
-            $denda = $telat * 1000; // Rp 1.000 per hari keterlambatan
-        }
-
-        // Kembalikan stok buku
-        $peminjaman->book->increment('stok', $peminjaman->jumlah);
-
-        $peminjaman->update([
-            'status'            => 'Dikembalikan',
-            'tgl_kembali_actual'=> $tglKembaliActual,
-            'denda'             => $denda,
-        ]);
-
-        return back()->with('success', 'Buku berhasil dikembalikan!' . ($denda > 0 ? ' Denda: Rp ' . number_format($denda, 0, ',', '.') : ''));
+public function kembalikan(Peminjaman $peminjaman)
+{
+    if ($peminjaman->user_id !== Auth::id()) {
+        abort(403);
     }
+
+    if ($peminjaman->status !== 'Diterima') {
+        return back()->with('error', 'Peminjaman tidak dalam status aktif!');
+    }
+
+    // Hanya ubah status, belum isi tanggal & denda
+    $peminjaman->update([
+        'status' => 'Menunggu Pengembalian',
+    ]);
+
+    return back()->with('success', 'Pengajuan pengembalian berhasil dikirim! Menunggu konfirmasi admin.');
+}
 
     // Riwayat peminjaman user
     public function riwayat()

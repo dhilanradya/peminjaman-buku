@@ -59,6 +59,20 @@
                 </div>
             </div>
 
+            <div class="w-64">
+                <select name="status_denda"
+                    class="w-full bg-gray-900 border border-gray-700 rounded-2xl px-5 py-3.5 focus:outline-none focus:border-blue-500 text-white">
+
+                    <option value="">Semua Denda</option>
+                    <option value="Belum Dibayar" {{ request('status_denda') == 'Belum Dibayar' ? 'selected' : '' }}>
+                        Belum Dibayar
+                    </option>
+                    <option value="Sudah Dibayar" {{ request('status_denda') == 'Sudah Dibayar' ? 'selected' : '' }}>
+                        Sudah Dibayar
+                    </option>
+                </select>
+            </div>
+
             <!-- Filter Status -->
             <div class="w-64">
                 <select name="status"
@@ -91,6 +105,7 @@
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Batas Kembali</th>
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Tanggal Dikembalikan</th>
                         <th class="text-center py-5 px-6 text-gray-400 font-medium w-32">Denda</th>
+                        <th class="text-center py-5 px-6 text-gray-400 font-medium w-36">Status Denda</th>
                         <th class="text-center py-5 px-6 text-gray-400 font-medium w-36">Status</th>
                     </tr>
                 </thead>
@@ -115,6 +130,23 @@
                             @endif
                         </td>
                         <td class="py-5 px-6 text-center">
+                        @if($p->denda > 0)
+                            @if($p->status_denda == 'Belum Dibayar')
+                                <span class="inline-block px-5 py-1.5 bg-yellow-500/20 text-yellow-400 text-sm font-medium rounded-2xl">
+                                    Belum Dibayar
+                                </span>
+                            @elseif($p->status_denda == 'Sudah Dibayar')
+                                <span class="inline-block px-5 py-1.5 bg-emerald-500/20 text-emerald-400 text-sm font-medium rounded-2xl">
+                                    Sudah Dibayar
+                                </span>
+                            @endif
+                        @else
+                            <span class="inline-block px-5 py-1.5 bg-gray-500/20 text-gray-400 text-sm font-medium rounded-2xl">
+                                Tidak Ada
+                            </span>
+                        @endif
+</td>
+                        <td class="py-5 px-6 text-center">
                             @if($p->status == 'Dikembalikan')
                                 <span class="inline-block px-5 py-1.5 bg-blue-500/20 text-blue-400 text-sm font-medium rounded-2xl">Dikembalikan</span>
                             @elseif($p->status == 'Diterima')
@@ -128,6 +160,17 @@
                     </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="8" class="text-right py-5 px-6 font-semibold text-white">
+                        Total Denda
+                    </td>
+                    <td class="py-5 px-6 text-center font-bold text-red-400">
+                        Rp {{ number_format($totalDenda, 0, ',', '.') }}
+                    </td>
+                    <td colspan="2"></td>
+                </tr>
+            </tfoot>
             </table>
         </div>
     </div>

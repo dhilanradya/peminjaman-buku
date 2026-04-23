@@ -16,6 +16,7 @@
                     <th class="text-left py-5 px-6">Batas Kembali</th>
                     <th class="text-left py-5 px-6">Tanggal Dikembalikan</th>
                     <th class="text-center py-5 px-6">Denda</th>
+                    <th class="text-center py-5 px-6 w-48">Status Denda</th>
                     <th class="text-center py-5 px-6">Status</th>
 
                 </tr>
@@ -37,16 +38,39 @@
                             <span class="text-emerald-400">-</span>
                         @endif
                     </td>
-                    <td class="py-5 px-6 text-center">
-                        @if($p->status == 'Menunggu')
-                            <span class="bg-yellow-500/20 text-yellow-400 px-4 py-1 rounded-2xl text-sm">Menunggu</span>
-                        @elseif($p->status == 'Diterima')
-                            <span class="bg-emerald-500/20 text-emerald-400 px-4 py-1 rounded-2xl text-sm">Dipinjam</span>
-                        @elseif($p->status == 'Dikembalikan')
-                            <span class="bg-blue-500/20 text-blue-400 px-4 py-1 rounded-2xl text-sm">Dikembalikan</span>
+                    <td class="py-5 px-6 text-center  whitespace-nowrap">
+                        @if($p->denda > 0)
+                            @if($p->status_denda == 'Belum Dibayar')
+                                <span class="bg-yellow-500/20 text-yellow-400 px-4 py-1 rounded-2xl text-sm">
+                                    Belum Dibayar
+                                </span>
+                            @elseif($p->status_denda == 'Sudah Dibayar')
+                                <span class="bg-emerald-500/20 text-emerald-400 px-4 py-1 rounded-2xl text-sm">
+                                    Sudah Dibayar
+                                </span>
+                            @else
+                                <span class="bg-gray-500/20 text-gray-400 px-4 py-1 rounded-2xl text-sm">
+                                    -
+                                </span>
+                            @endif
                         @else
-                            <span class="bg-red-500/20 text-red-400 px-4 py-1 rounded-2xl text-sm">Ditolak</span>
+                            <span class="bg-gray-500/20 text-gray-400 px-4 py-1 rounded-2xl text-sm">
+                                Tidak Ada
+                            </span>
                         @endif
+                    </td>
+                    <td class="py-5 px-6 text-center">
+                       @if($p->status == 'Menunggu')
+                        <span class="bg-yellow-500/20 text-yellow-400 px-4 py-1 rounded-2xl text-sm">Menunggu</span>
+                    @elseif($p->status == 'Diterima')
+                        <span class="bg-emerald-500/20 text-emerald-400 px-4 py-1 rounded-2xl text-sm">Dipinjam</span>
+                    @elseif($p->status == 'Menunggu Pengembalian')
+                        <span class="bg-orange-500/20 text-orange-400 px-4 py-1 rounded-2xl text-sm">Menunggu Konfirmasi</span>
+                    @elseif($p->status == 'Dikembalikan')
+                        <span class="bg-blue-500/20 text-blue-400 px-4 py-1 rounded-2xl text-sm">Dikembalikan</span>
+                    @else
+                        <span class="bg-red-500/20 text-red-400 px-4 py-1 rounded-2xl text-sm">Ditolak</span>
+                    @endif
                     </td>
 
                 </tr>

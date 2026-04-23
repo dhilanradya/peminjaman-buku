@@ -13,7 +13,7 @@ class Peminjaman extends Model
 
    protected $fillable = [
     'user_id', 'book_id', 'jumlah', 'tgl_pinjam', 'tgl_kembali',
-    'tgl_kembali_actual', 'denda', 'status'
+    'tgl_kembali_actual', 'denda', 'status_denda', 'status'
     ];
 
     public function user()

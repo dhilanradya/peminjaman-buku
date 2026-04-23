@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 
+
 // Login Umum
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -70,6 +71,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin'])->group(
 
     Route::get('/laporan/export-pdf', [App\Http\Controllers\Admin\LaporanController::class, 'exportPdf'])
         ->name('laporan.export.pdf');
+
+    Route::get('/data-pengembalian', [App\Http\Controllers\Admin\PeminjamanController::class, 'indexPengembalian'])
+     ->name('dataPengembalian');
+
+    Route::post('/pengembalian/{peminjaman}/terima', [App\Http\Controllers\Admin\PeminjamanController::class, 'terimaKembali'])
+     ->name('pengembalian.terima');
+     Route::get('/data-denda', [App\Http\Controllers\Admin\PeminjamanController::class, 'indexDenda'])
+     ->name('dataDenda');
+
+    Route::post('/denda/{peminjaman}/konfirmasi', [App\Http\Controllers\Admin\PeminjamanController::class, 'konfirmasiDenda'])
+        ->name('denda.konfirmasi');
 });
 
 // ====================== USER ROUTES ======================
@@ -119,4 +131,5 @@ Route::prefix('user')->name('user.')->middleware(['auth', 'is_user'])->group(fun
     // Profile User
     Route::get('/profile', [App\Http\Controllers\User\ProfileController::class, 'index'])
         ->name('profile');
+
 });

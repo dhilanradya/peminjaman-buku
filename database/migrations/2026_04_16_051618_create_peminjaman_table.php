@@ -16,7 +16,9 @@ return new class extends Migration {
             $table->date('tgl_kembali')->nullable();
             $table->date('tgl_kembali_actual')->nullable();
             $table->integer('denda')->default(0);
-            $table->enum('status', ['Menunggu', 'Diterima', 'Dikembalikan'])
+            $table->enum('status_denda', ['Tidak Ada Denda', 'Belum Dibayar', 'Sudah Dibayar'])
+                  ->default('Tidak Ada Denda');
+            $table->enum('status', ['Menunggu', 'Diterima', 'Menunggu Pengembalian', 'Dikembalikan'])
                 ->default('Menunggu');
             $table->timestamps();
         });

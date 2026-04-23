@@ -4,6 +4,27 @@
 
 @section('content')
 
+{{-- ALERT SUCCESS --}}
+@if(session('success'))
+    <div data-alert class="mb-6 bg-emerald-500/20 border border-emerald-500 text-emerald-300 px-6 py-4 rounded-2xl">
+        {{ session('success') }}
+    </div>
+@endif
+
+{{-- ALERT WARNING --}}
+@if(session('warning'))
+    <div data-alert class="mb-6 bg-yellow-500/20 border border-yellow-500 text-yellow-300 px-6 py-4 rounded-2xl">
+         {{ session('warning') }}
+    </div>
+@endif
+
+{{-- ALERT ERROR --}}
+@if(session('error'))
+    <div data-alert class="mb-6 bg-emerald-500/20 border border-red-500 text-red-300 px-6 py-4 rounded-2xl">
+        {{ session('error') }}
+    </div>
+@endif
+
 @php
     $punyaPinjamanAktif = $punyaPinjamanAktif ?? false;
 @endphp
@@ -58,21 +79,25 @@
                     <h3 class="font-semibold text-white line-clamp-2 h-12">{{ $p->book->judul }}</h3>
                     <p class="text-gray-400 text-sm mt-1">{{ $p->book->penulis }}</p>
 
-                    <div class="flex justify-center items-center mt-4">
-
-
-                        <button onclick='openKembalikanModal({{ json_encode([
-                            "id" => $p->id,
-                            "judul" => $p->book->judul,
-                            "penulis" => $p->book->penulis,
-                            "foto" => $p->book->foto,
-                            "tgl_pinjam" => \Carbon\Carbon::parse($p->tgl_pinjam)->format("d M Y"),
-                            "tgl_kembali" => \Carbon\Carbon::parse($p->tgl_kembali)->format("d M Y"),
-                            "sisa_hari" => (int)$sisaHari,
-                        ]) }})'
-                                class="bg-emerald-600 hover:bg-emerald-700 px-4 py-2.5 rounded-2xl text-sm font-medium transition">
-                            Kembalikan
-                        </button>
+                   <div class="flex justify-center items-center mt-4">
+                        @if($p->status === 'Diterima')
+                            <button onclick='openKembalikanModal({{ json_encode([
+                                "id" => $p->id,
+                                "judul" => $p->book->judul,
+                                "penulis" => $p->book->penulis,
+                                "foto" => $p->book->foto,
+                                "tgl_pinjam" => \Carbon\Carbon::parse($p->tgl_pinjam)->format("d M Y"),
+                                "tgl_kembali" => \Carbon\Carbon::parse($p->tgl_kembali)->format("d M Y"),
+                                "sisa_hari" => (int)$sisaHari,
+                            ]) }})'
+                                    class="bg-emerald-600 hover:bg-emerald-700 px-4 py-2.5 rounded-2xl text-sm font-medium transition">
+                                Kembalikan
+                            </button>
+                        @elseif($p->status === 'Menunggu Pengembalian')
+                            <span class="bg-orange-500/20 text-orange-400 px-4 py-2.5 rounded-2xl text-sm font-medium text-center">
+                                <i class="fas fa-clock mr-1"></i> Menunggu Konfirmasi
+                            </span>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -168,6 +193,13 @@
     </div>
 
 </div>
+
+<script>
+    setTimeout(() => {
+        const alert = document.querySelector('[data-alert]');
+        if (alert) alert.remove();
+    }, 3000);
+</script>
 
 @include('components.modal-pinjam')
 @include('components.modal-kembalikan')

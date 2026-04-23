@@ -10,17 +10,12 @@
 
         <!-- Body -->
         <div class="flex gap-4 p-6">
-            <!-- Gambar -->
             <img id="kembalikanBookImage" src="/images/no-image.jpg"
                  class="w-24 h-32 object-cover rounded-2xl flex-shrink-0">
-
-            <!-- Detail -->
             <div class="flex-1 min-w-0">
                 <h3 class="font-bold text-white text-base leading-tight line-clamp-2" id="kembalikanBookTitle"></h3>
                 <p class="text-gray-400 text-sm mt-1" id="kembalikanBookAuthor"></p>
-
                 <div class="mt-3 space-y-1.5 text-sm">
-                    
                     <div class="flex justify-between">
                         <span class="text-gray-400">Tgl Pinjam</span>
                         <span class="font-medium text-white" id="kembalikanTglPinjam"></span>
@@ -37,10 +32,16 @@
             </div>
         </div>
 
-        <!-- Warning -->
+        <!-- Warning terlambat -->
         <div id="kembalikanWarning" class="hidden mx-6 mb-4 bg-red-500/10 border border-red-500/30 rounded-2xl px-4 py-3 text-center text-sm">
             <i class="fas fa-exclamation-triangle text-red-400 mr-1"></i>
             <span class="text-red-400" id="kembalikanWarningText"></span>
+        </div>
+
+        <!-- Info menunggu konfirmasi admin -->
+        <div class="mx-6 mb-4 bg-blue-500/10 border border-blue-500/30 rounded-2xl px-4 py-3 text-center text-sm">
+            <i class="fas fa-info-circle text-blue-400 mr-1"></i>
+            <span class="text-blue-300">Pengembalian akan menunggu konfirmasi dari admin.</span>
         </div>
 
         <!-- Footer -->
@@ -55,7 +56,7 @@
                     </button>
                     <button type="submit"
                             class="flex-1 bg-emerald-600 hover:bg-emerald-700 py-3 rounded-2xl text-sm font-medium transition">
-                        Ya, Kembalikan
+                        Ya, Ajukan Pengembalian
                     </button>
                 </div>
             </form>
@@ -82,7 +83,7 @@ function openKembalikanModal(p) {
         sisaEl.textContent = 'Terlambat ' + Math.abs(p.sisa_hari) + ' hari';
         sisaEl.className = 'font-bold text-red-400';
         warningEl.classList.remove('hidden');
-        warningTextEl.textContent = 'Buku terlambat ' + Math.abs(p.sisa_hari) + ' hari. Akan dikenakan denda.';
+        warningTextEl.textContent = 'Buku terlambat ' + Math.abs(p.sisa_hari) + ' hari. Akan dikenakan denda Rp ' + (Math.abs(p.sisa_hari) * 1000).toLocaleString('id-ID') + '.';
     } else if (p.sisa_hari <= 3) {
         sisaEl.textContent = 'Sisa ' + p.sisa_hari + ' hari';
         sisaEl.className = 'font-bold text-yellow-400';

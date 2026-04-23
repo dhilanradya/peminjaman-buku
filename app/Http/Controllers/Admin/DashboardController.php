@@ -11,19 +11,14 @@ class DashboardController extends Controller
 {
     public function index()
     {
-
         $totalBuku = Book::count();
-
-
         $totalStok = Book::sum('stok');
-
-
         $totalPeminjaman = Peminjaman::where('status', '!=', 'Dikembalikan')->count();
-
-
         $totalUser = User::where('role', 'user')->count();
 
-       
+        // Tambahkan total denda yang belum dibayar
+        $totalDenda = Peminjaman::where('status_denda', 'Belum Dibayar')->sum('denda');
+
         $aktivitas = Peminjaman::with(['user', 'book'])
             ->latest()
             ->take(5)
@@ -34,6 +29,7 @@ class DashboardController extends Controller
             'totalStok',
             'totalPeminjaman',
             'totalUser',
+            'totalDenda',
             'aktivitas'
         ));
     }
