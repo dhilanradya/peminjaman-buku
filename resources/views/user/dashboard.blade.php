@@ -3,6 +3,11 @@
 @section('title', 'Dashboard - User')
 
 @section('content')
+
+@php
+    $punyaPinjamanAktif = $punyaPinjamanAktif ?? false;
+@endphp
+
 <div class="max-w-7xl mx-auto px-6">
 
     <!-- Welcome -->
@@ -53,18 +58,14 @@
                     <h3 class="font-semibold text-white line-clamp-2 h-12">{{ $p->book->judul }}</h3>
                     <p class="text-gray-400 text-sm mt-1">{{ $p->book->penulis }}</p>
 
-                    <div class="flex justify-between items-center mt-4">
-                        <div>
-                            <span class="text-xs text-gray-500">Dipinjam</span>
-                            <p class="font-bold text-lg text-blue-400">{{ $p->jumlah }} eks</p>
-                        </div>
+                    <div class="flex justify-center items-center mt-4">
+
 
                         <button onclick='openKembalikanModal({{ json_encode([
                             "id" => $p->id,
                             "judul" => $p->book->judul,
                             "penulis" => $p->book->penulis,
                             "foto" => $p->book->foto,
-                            "jumlah" => $p->jumlah,
                             "tgl_pinjam" => \Carbon\Carbon::parse($p->tgl_pinjam)->format("d M Y"),
                             "tgl_kembali" => \Carbon\Carbon::parse($p->tgl_kembali)->format("d M Y"),
                             "sisa_hari" => (int)$sisaHari,
@@ -148,14 +149,15 @@
                             </p>
                         </div>
 
-                        @if($book->stok > 0)
+                       @if($book->stok > 0 && !$punyaPinjamanAktif)
                             <button onclick='openPinjamModal({{ json_encode($book) }})'
                                     class="bg-blue-600 hover:bg-blue-700 px-5 py-2.5 rounded-2xl text-sm font-medium transition">
                                 Pinjam
                             </button>
                         @else
-                            <button disabled class="bg-gray-700 px-5 py-2.5 rounded-2xl text-sm font-medium cursor-not-allowed">
-                                Habis
+                            <button disabled
+                                class="bg-gray-700 px-5 py-2.5 rounded-2xl text-sm font-medium cursor-not-allowed">
+                                {{ $punyaPinjamanAktif ? 'Masih Ada Pinjaman' : 'Habis' }}
                             </button>
                         @endif
                     </div>

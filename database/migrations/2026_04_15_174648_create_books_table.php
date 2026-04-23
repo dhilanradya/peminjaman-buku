@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('judul');
             $table->string('penulis');
+            $table->string('isbn')->unique();
             $table->foreignId('kategori_id')->constrained('kategoris')->onDelete('cascade');
             $table->string('penerbit');
             $table->integer('stok')->default(0);

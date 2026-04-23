@@ -35,6 +35,17 @@
                                required>
                     </div>
 
+
+                    <div>
+                        <label class="block text-gray-400 text-sm mb-2">ISBN</label>
+                        <input type="text" name="isbn"
+                            value="{{ old('isbn', $book->isbn) }}"
+                            class="w-full bg-gray-900 border border-gray-700 rounded-2xl px-5 py-4 focus:outline-none focus:border-blue-500 text-white"
+                            required>
+                    </div>
+
+                    
+
                     <div class="grid grid-cols-2 gap-6">
                         <div>
                             <label class="block text-gray-400 text-sm mb-2">Kategori</label>

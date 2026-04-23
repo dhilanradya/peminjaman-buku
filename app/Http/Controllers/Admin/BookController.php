@@ -50,13 +50,14 @@ class BookController extends Controller
         $request->validate([
             'judul'       => 'required|string|max:255',
             'penulis'     => 'required|string|max:255',
+            'isbn'        => 'required|string|max:13|unique:books,isbn',
             'kategori_id' => 'required|exists:kategoris,id',
             'penerbit'    => 'required|string|max:255',
             'stok'        => 'required|integer|min:0',
             'foto'        => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $data = $request->only(['judul', 'penulis', 'kategori_id', 'penerbit', 'stok']);
+        $data = $request->only(['judul', 'penulis', 'isbn', 'kategori_id', 'penerbit', 'stok']);
 
         // Upload foto jika ada
         if ($request->hasFile('foto')) {
@@ -85,6 +86,7 @@ class BookController extends Controller
         $request->validate([
             'judul'        => 'required|string|max:255',
             'penulis'      => 'required|string|max:255',
+            'isbn'         => 'required|string|max:13|unique:books,isbn,' . $book->id,
             'kategori_id'  => 'required|exists:kategoris,id', // ✅ FIX
             'penerbit'     => 'required|string|max:255',
             'stok'         => 'required|integer|min:0',

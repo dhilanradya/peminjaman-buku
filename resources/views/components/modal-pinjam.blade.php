@@ -29,11 +29,6 @@
                     <input type="hidden" name="book_id" id="modalBookId">
 
                     <div class="space-y-6">
-                        <div>
-                            <label class="block text-gray-400 text-sm mb-2">Jumlah Buku yang Dipinjam (Maks 5)</label>
-                            <input type="number" name="jumlah" id="jumlah" min="1" max="5"
-                                   class="w-full bg-gray-900 border border-gray-700 rounded-2xl px-5 py-4 text-white" required>
-                        </div>
 
                         <div>
                             <label class="block text-gray-400 text-sm mb-2">Lama Peminjaman (Maks 20 hari)</label>

@@ -12,6 +12,7 @@ class Book extends Model
     protected $fillable = [
         'judul',
         'penulis',
+        'isbn',
         'kategori_id',
         'penerbit',
         'stok',

@@ -13,13 +13,13 @@ use Carbon\Carbon;
 class PeminjamanUserController extends Controller
 {
     // Dashboard: tampilkan buku tersedia + buku sedang dipinjam user
-    public function dashboard(Request $request)
+   public function dashboard(Request $request)
     {
         $query = Book::query();
 
         if ($request->search) {
             $query->where('judul', 'like', '%' . $request->search . '%')
-                  ->orWhere('penulis', 'like', '%' . $request->search . '%');
+                ->orWhere('penulis', 'like', '%' . $request->search . '%');
         }
 
         if ($request->kategori_id) {
@@ -29,41 +29,60 @@ class PeminjamanUserController extends Controller
         $books = $query->paginate(10);
         $kategoris = Kategori::all();
 
+        // ✅ CEK apakah user punya peminjaman aktif
+        $punyaPinjamanAktif = Peminjaman::where('user_id', Auth::id())
+            ->whereIn('status', ['Menunggu', 'Diterima'])
+            ->exists();
+
         // Ambil peminjaman user yang sedang aktif (status Diterima)
         $bukuDipinjam = Peminjaman::with('book')
             ->where('user_id', Auth::id())
             ->where('status', 'Diterima')
             ->get();
 
-        return view('user.dashboard', compact('books', 'kategoris', 'bukuDipinjam'));
+        return view('user.dashboard', compact(
+            'books',
+            'kategoris',
+            'bukuDipinjam',
+            'punyaPinjamanAktif' 
+        ));
     }
 
     // Store peminjaman baru
-    public function store(Request $request)
-    {
-        $request->validate([
-            'book_id' => 'required|exists:books,id',
-            'jumlah'  => 'required|integer|min:1|max:5',
-            'hari'    => 'required|integer|min:1|max:20',
-        ]);
+   public function store(Request $request)
+{
+    $request->validate([
+        'book_id' => 'required|exists:books,id',
+        'hari'    => 'required|integer|min:1|max:20',
+    ]);
 
-        $book = Book::findOrFail($request->book_id);
+    $book = Book::findOrFail($request->book_id);
 
-        if ($book->stok < $request->jumlah) {
-            return back()->with('error', 'Stok buku tidak mencukupi!');
-        }
+    // ❌ CEK PEMINJAMAN AKTIF (GLOBAL)
+    $aktif = Peminjaman::where('user_id', Auth::id())
+        ->whereIn('status', ['Menunggu', 'Diterima'])
+        ->exists();
 
-        Peminjaman::create([
-            'user_id'     => Auth::id(),
-            'book_id'     => $request->book_id,
-            'jumlah'      => (int) $request->jumlah,
-            'tgl_pinjam'  => now()->toDateString(),
-            'tgl_kembali' => now()->addDays((int) $request->hari)->toDateString(), // tambah (int)
-            'status'      => 'Menunggu',
-        ]);
-
-        return back()->with('success', 'Pengajuan peminjaman berhasil dikirim!');
+    if ($aktif) {
+        return back()->with('error', 'Anda masih memiliki peminjaman aktif!');
     }
+
+    // ❌ CEK STOK (karena sekarang jumlah = 1)
+    if ($book->stok < 1) {
+        return back()->with('error', 'Stok buku tidak tersedia!');
+    }
+
+    Peminjaman::create([
+        'user_id'     => Auth::id(),
+        'book_id'     => $request->book_id,
+        'jumlah'      => 1,
+        'tgl_pinjam'  => now()->toDateString(),
+        'tgl_kembali' => now()->addDays((int) $request->hari)->toDateString(),
+        'status'      => 'Menunggu',
+    ]);
+
+    return back()->with('success', 'Pengajuan peminjaman berhasil dikirim!');
+}
 
     // Kembalikan buku (dipanggil dari modal di dashboard)
     public function kembalikan(Peminjaman $peminjaman)

@@ -36,6 +36,17 @@
                                placeholder="Nama penulis" required>
                     </div>
 
+                    <div>
+                        <label class="block text-gray-400 text-sm mb-2">ISBN</label>
+                        <input type="text" name="isbn"
+                            value="{{ old('isbn') }}"
+                            class="w-full bg-gray-900 border border-gray-700 rounded-2xl px-5 py-4 focus:outline-none focus:border-blue-500 text-white"
+                            placeholder="Contoh: 9786020332956" required>
+                    </div>
+
+                    @error('isbn')
+                        <p class="text-red-400 text-sm mt-2">{{ $message }}</p>
+                    @enderror
                     <!-- Kategori & Penerbit -->
                     <div class="grid grid-cols-2 gap-6">
                         <div>

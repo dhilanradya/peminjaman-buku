@@ -41,16 +41,4 @@ public function terima(Peminjaman $peminjaman)
     return back()->with('success', 'Peminjaman berhasil diterima. Stok buku berkurang.');
 }
 
-    // Tolak Peminjaman
-    public function tolak(Peminjaman $peminjaman)
-    {
-        if ($peminjaman->status !== 'Menunggu') {
-            return back()->with('error', 'Status sudah diproses!');
-        }
-
-        $peminjaman->update(['status' => 'Ditolak']);
-
-        return back()->with('success', 'Peminjaman berhasil ditolak.');
-    }
-
 }

@@ -60,8 +60,6 @@
                                 <span class="inline-block px-5 py-1.5 bg-emerald-500/20 text-emerald-400 text-sm font-medium rounded-2xl">Diterima</span>
                             @elseif($pinjam->status == 'Dikembalikan')
                                 <span class="inline-block px-5 py-1.5 bg-blue-500/20 text-blue-400 text-sm font-medium rounded-2xl">Dikembalikan</span>
-                            @else
-                                <span class="inline-block px-5 py-1.5 bg-red-500/20 text-red-400 text-sm font-medium rounded-2xl">Ditolak</span>
                             @endif
                         </td>
                         <td class="py-5 px-6 text-center">
@@ -72,14 +70,6 @@
                                         <button type="submit"
                                                 class="bg-emerald-600 hover:bg-emerald-700 px-4 py-2 rounded-xl text-sm font-medium transition">
                                             Terima
-                                        </button>
-                                    </form>
-                                    <form action="{{ route('admin.peminjaman.tolak', $pinjam) }}" method="POST">
-                                        @csrf
-                                        <button type="submit"
-                                                class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-xl text-sm font-medium transition"
-                                                onclick="return confirm('Yakin tolak peminjaman ini?')">
-                                            Tolak
                                         </button>
                                     </form>
                                 </div>

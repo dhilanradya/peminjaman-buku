@@ -66,6 +66,7 @@
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Foto</th>
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Judul Buku</th>
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Penulis</th>
+                        <th class="text-left py-5 px-6 text-gray-400 font-medium">ISBN</th>
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Kategori</th>
                         <th class="text-left py-5 px-6 text-gray-400 font-medium">Penerbit</th>
                         <th class="text-center py-5 px-6 text-gray-400 font-medium w-20">Stok</th>
@@ -96,6 +97,7 @@
                         <!-- Data -->
                         <td class="py-5 px-6 font-medium text-white">{{ $book->judul }}</td>
                         <td class="py-5 px-6 text-gray-300">{{ $book->penulis }}</td>
+                        <td class="py-5 px-6 text-gray-300">{{ $book->isbn }}</td>
 
                         <!-- ✅ KATEGORI (RELASI) -->
                         <td class="py-5 px-6">

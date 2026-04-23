@@ -20,10 +20,7 @@
                 <p class="text-gray-400 text-sm mt-1" id="kembalikanBookAuthor"></p>
 
                 <div class="mt-3 space-y-1.5 text-sm">
-                    <div class="flex justify-between">
-                        <span class="text-gray-400">Jumlah</span>
-                        <span class="font-medium text-blue-400" id="kembalikanJumlah"></span>
-                    </div>
+                    
                     <div class="flex justify-between">
                         <span class="text-gray-400">Tgl Pinjam</span>
                         <span class="font-medium text-white" id="kembalikanTglPinjam"></span>
@@ -74,7 +71,6 @@ function openKembalikanModal(p) {
 
     document.getElementById('kembalikanBookTitle').textContent = p.judul;
     document.getElementById('kembalikanBookAuthor').textContent = p.penulis;
-    document.getElementById('kembalikanJumlah').textContent = p.jumlah + ' eksemplar';
     document.getElementById('kembalikanTglPinjam').textContent = p.tgl_pinjam;
     document.getElementById('kembalikanTglKembali').textContent = p.tgl_kembali;
 

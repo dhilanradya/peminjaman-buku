@@ -66,8 +66,6 @@
                     <option value="">Semua Status</option>
                     <option value="Dikembalikan" {{ request('status') == 'Dikembalikan' ? 'selected' : '' }}>Dikembalikan</option>
                     <option value="Diterima" {{ request('status') == 'Diterima' ? 'selected' : '' }}>Masih Dipinjam</option>
-                    <option value="Menunggu" {{ request('status') == 'Menunggu' ? 'selected' : '' }}>Menunggu</option>
-                    <option value="Ditolak" {{ request('status') == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
                 </select>
             </div>
 

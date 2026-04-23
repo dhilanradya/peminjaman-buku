@@ -21,6 +21,7 @@ class BookSeeder extends Seeder
             [
                 'judul'     => 'Laskar Pelangi',
                 'penulis'   => 'Andrea Hirata',
+                'isbn'      => '9786020332956',
                 'kategori_id' => $kategoris['Fiksi'],
                 'penerbit'  => 'Bentang Pustaka',
                 'stok'      => 23,
@@ -29,6 +30,7 @@ class BookSeeder extends Seeder
             [
                 'judul'     => 'Negeri 5 Menara',
                 'penulis'   => 'Ahmad Fuadi',
+                'isbn'      => '9786020332957',
                 'kategori_id' => $kategoris['Non-Fiksi'],
                 'penerbit'  => 'Gramedia Pustaka Utama',
                 'stok'      => 15,
@@ -37,6 +39,7 @@ class BookSeeder extends Seeder
             [
                 'judul'     => 'Atomic Habits',
                 'penulis'   => 'James Clear',
+                'isbn'      => '9786020332958',
                 'kategori_id' => $kategoris['Non-Fiksi'],
                 'penerbit'  => 'Gramedia Pustaka Utama',
                 'stok'      => 18,
@@ -45,6 +48,7 @@ class BookSeeder extends Seeder
             [
                 'judul'     => 'The Psychology of Money',
                 'penulis'   => 'Morgan Housel',
+                'isbn'      => '9786020332959',
                 'kategori_id' => $kategoris['Teknologi'],
                 'penerbit'  => 'Gramedia',
                 'stok'      => 9,
@@ -53,6 +57,7 @@ class BookSeeder extends Seeder
             [
                 'judul'     => 'Harry Potter and The Philosopher\'s Stone',
                 'penulis'   => 'J.K. Rowling',
+                'isbn'      => '9786020332950',
                 'kategori_id' => $kategoris['Non-Fiksi'],
                 'penerbit'  => 'Bloomsbury',
                 'stok'      => 7,
@@ -61,6 +66,7 @@ class BookSeeder extends Seeder
             [
                 'judul'     => 'Sapiens: Riwayat Singkat Umat Manusia',
                 'penulis'   => 'Yuval Noah Harari',
+                'isbn'      => '9786020332951',
                 'kategori_id' => $kategoris['Sejarah'],
                 'penerbit'  => 'Gramedia Pustaka Utama',
                 'stok'      => 14,
@@ -69,6 +75,7 @@ class BookSeeder extends Seeder
             [
                 'judul'     => 'Bumi',
                 'penulis'   => 'Tere Liye',
+                'isbn'      => '9786020332952',
                 'kategori_id' => $kategoris['Fiksi'],
                 'penerbit'  => 'Gramedia Pustaka Utama',
                 'stok'      => 10,
@@ -77,6 +84,7 @@ class BookSeeder extends Seeder
             [
                 'judul'     => 'Matematika Dasar SMA',
                 'penulis'   => 'Tim Erlangga',
+                'isbn'      => '9786020332953',
                 'kategori_id' => $kategoris['Pendidikan'],
                 'penerbit'  => 'Erlangga',
                 'stok'      => 45,
